@@ -6,7 +6,6 @@ def get_link(text):
     word = re.search('(.*?)\[\[(.*?)\]\](.*?)', text)
     if word is not None and word.groups()[1][:4] not in ['ファイル', 'http', 'Cate']:
         link_word = word.groups()[1].split('|')[-1]
-        print(word, link_word)
         return word.groups()[0] + link_word + word.groups()[2]
     return text
 
