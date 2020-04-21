@@ -1,5 +1,3 @@
-import unicodedata
-
 class Morph(object):
     def __init__(self, surface, base, pos, pos1):
         self.surface = surface
