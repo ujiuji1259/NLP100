@@ -7,11 +7,10 @@ class Chunk(object):
         self.dst = dst
         self.srcs = srcs
 
-if __name__ == '__main__':
-    with open('neko.txt.cabocha', 'r') as f:
-        lines = [line.split('\n') for line in f.read().split('EOS\n') if line != '']
+    def __str__(self):
+        return ''.join([m.surface for m in self.morphs if m.pos != '記号'])
 
-    lines = [[l.replace('\t', ',').split(',') for l in line if l != ''] for line in lines]
+def create_chunks(lines):
     lines = [[Morph(l[0], l[7], l[1], l[2]) if l[0][0] != '*' else l[0].split() for l in line] for line in lines]
 
     sents = []
@@ -27,6 +26,15 @@ if __name__ == '__main__':
             else:
                 sent[-1].morphs.append(l)
         sents.append(sent)
+    return sents
+
+if __name__ == '__main__':
+    with open('neko.txt.cabocha', 'r') as f:
+        lines = [line.split('\n') for line in f.read().split('EOS\n') if line != '']
+
+    lines = [[l.replace('\t', ',').split(',') for l in line if l != ''] for line in lines]
+
+    sents = create_chunks(lines)
 
     for l in sents[7]:
         print([t.surface for t in l.morphs])
