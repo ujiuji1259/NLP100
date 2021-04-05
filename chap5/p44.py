@@ -14,4 +14,5 @@ if __name__ == '__main__':
             edges.append((str(c), str(sents[10][c.dst])))
 
     g = pydot.graph_from_edges(edges,directed=True)
-    g.write_png("dependenttree.png")
+    g.set_rankdir('LR')
+    g.write_png("dependenttre.png")
