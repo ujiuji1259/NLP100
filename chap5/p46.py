@@ -10,15 +10,18 @@ if __name__ == '__main__':
     outputs = []
     for s in sents:
         for c in s:
-            verb = [(morph, c.dst) for morph, src in zip(c.morphs, c.srcs) if morph.pos == "動詞"]
+            verb = [(morph, c.srcs) for morph, src in zip(c.morphs, c.srcs) if morph.pos == "動詞"]
             if len(verb) == 0:
                 continue
-            dst_chunk = s[verb[0][1]]
-            pos = [(morph.surface, str(dst_chunk)) for morph in dst_chunk.morphs if morph.pos == "助詞"]
-            if len(pos) == 0:
+            verb = verb[0]
+            poss = []
+            for src in verb[1]:
+                pos = [p.surface for p in s[src].morphs if p.pos == "助詞"]
+                if not pos:
+                    continue
+                poss.append((pos[0], str(s[src])))
+            poss = sorted(poss)
+            if not poss:
                 continue
-
-            sort_pos = sorted(pos, key=lambda x: x[0])
-
-            outputs.append(' '.join([verb[0][0].base] + [p[0] for p in sort_pos] + [p[1] for p in sort_pos]))
+            outputs.append(verb[0].base + ' ' + ' '.join([p[0] for p in poss]) + ' ' + ' '.join([p[1] for p in poss]))
     print('\n'.join(outputs))
